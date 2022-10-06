@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
-import { archivedPhoto } from "../../../store/photos-slice";
+import { archivedPhoto, changePage, unZipPhoto } from "../../../store/photos-slice";
 import { Photo } from "../../atoms/archived-photo/types";
 import { PhotoCardContainer } from "../../atoms/photo";
 
@@ -9,10 +9,9 @@ import { NextPageBtn, PhotoListContainer } from "./styled-components";
 import { Photos } from "./types";
 
 export function PhotoList() {
-    const [page, setPage] = useState(1);
-    const [url, setUrl] = useState(`https://picsum.photos/v2/list?page=${page}&limit=12`);
     const [data, setData] = useState([] as Photo[]);
     const archivePhotosArr = useSelector<Photos, Photo[]>((state) => state.photos.archivedStore);
+    const url = useSelector<Photos, string>((state) => state.photos.activePage);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -31,13 +30,11 @@ export function PhotoList() {
 
             setData(result);
         }
-        
-        getPhotosData();
-    }, [setUrl]);
-    
-    console.log(url)
 
-    function changesPhoto(photoId: string) {
+        getPhotosData();
+    }, []);
+
+    function addInfoToStorage(photoId: string) {
         data.map((photo: Photo) => {
             if (photo.id === photoId) {
                 photo.archived = !photo.archived
@@ -46,12 +43,21 @@ export function PhotoList() {
         })
     }
 
+    function removeInfoFromStorage(photoId: string) {
+        data.map((photo: Photo) => {
+            if (photo.id === photoId) {
+                photo.archived = !photo.archived
+                dispatch(unZipPhoto(photo));
+            }
+        })
+    }
+
     return (
         <PhotoListContainer>
             {data.map((photo) => (
-                <PhotoCardContainer key={photo.id} photo={photo} settingToPhoto={(photoId) => changesPhoto(photoId)} />
+                <PhotoCardContainer key={photo.id} photo={photo} addToStorage={(photoId) => addInfoToStorage(photoId)} removeFromStorage={(photoId) => removeInfoFromStorage(photoId)} />
             ))}
-            <NextPageBtn onClick={() => { setPage(page + 1); setUrl(`https://picsum.photos/v2/list?page=${page + 1}&limit=12`) }}>Next</NextPageBtn>
+            <NextPageBtn onClick={() => { dispatch(changePage(1)) }}>Next</NextPageBtn>
         </PhotoListContainer>
     )
 }

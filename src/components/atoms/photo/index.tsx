@@ -3,10 +3,11 @@ import { Photo } from "../archived-photo/types";
 
 interface PhotoProps {
     photo: Photo;
-    settingToPhoto: (photoId: string) => void;
+    addToStorage: (photoId: string) => void;
+    removeFromStorage: (photoId: string) => void;
 }
 
-export function PhotoCardContainer({ photo, settingToPhoto }: PhotoProps) {
+export function PhotoCardContainer({ photo, addToStorage, removeFromStorage }: PhotoProps) {
 
     return (
         <PhotoContainer key={photo.id}>
@@ -15,7 +16,8 @@ export function PhotoCardContainer({ photo, settingToPhoto }: PhotoProps) {
                 <PhotoAuthor>{photo.author}</PhotoAuthor>
                 <PhotoNum>#{photo.id}</PhotoNum>
             </PhotoInfo>
-            {photo.archived === true ? <PhotoBtn onClick={() => settingToPhoto(photo.id)}>Remove photo from storage</PhotoBtn> : <PhotoBtn onClick={() => settingToPhoto(photo.id)}>Add photo to storage</PhotoBtn>}
+            {/* //Не сильно ли глупо будеть указывать конечном изминении на фолс именем какую функцию я выполняю для ремове */}
+            {photo.archived === true ? <PhotoBtn onClick={() => removeFromStorage(photo.id)}>Remove photo from storage</PhotoBtn> : <PhotoBtn onClick={() => addToStorage(photo.id)}>Add photo to storage</PhotoBtn>}
         </PhotoContainer>
     )
 }
