@@ -1,19 +1,26 @@
 import { Routes, Route } from 'react-router-dom';
 
-import { PhotoList } from './components/molecules/photo-list';
-import { AppContainer } from './styled-components';
-import { ArchivedPhotos } from './components/atoms/archived-photo';
+import { PhotosComponent } from './components/organisms/photo-list';
+import { ArchivedPhotos } from './components/molecules/archived-photo-container';
 import { HeaderContainer } from './components/atoms/header';
+import { RandomPhoto } from './components/molecules/generate-photo';
+import { AppContainer, PhotosContainer } from './styled-components';
+import { PageNotFound } from './components/atoms/page-not-found';
+import { MainPage } from './components/atoms/main-page';
 
 function App() {
     return (
         <AppContainer>
             <HeaderContainer />
-            <Routes>
-                <Route path='/' element={<PhotoList />} />
-                <Route path='/archived-photo' element={<ArchivedPhotos />} />
-                {/* <Route path='*' element={<NotFoundPage />} /> */}
-            </Routes>
+            <PhotosContainer>
+                <Routes>
+                    <Route path='/' element={<MainPage />} />
+                    <Route path='/photo-list' element={<PhotosComponent />} />
+                    <Route path='/archived-photo' element={<ArchivedPhotos />} />
+                    <Route path='/random-photo' element={<RandomPhoto />} />
+                    <Route path='*' element={<PageNotFound />} />
+                </Routes>
+            </PhotosContainer>
         </AppContainer>
     );
 }

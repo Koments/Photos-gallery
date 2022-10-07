@@ -1,30 +1,23 @@
-import { useSelector } from "react-redux";
-import { PhotoAuthor, PhotoBtn, PhotoContainer, PhotoInfo, PhotoListContainer, PhotoNum, PhotoSprite } from "../../molecules/photo-list/styled-components";
-import { Photo } from "./types";
+import { Photo } from "../../molecules/archived-photo-container/types";
+import { PhotoAuthor, PhotoBtn, PhotoContainer, PhotoInfo, PhotoNum, PhotoSprite } from "./styles-container"; 
+import { FaHeart } from "react-icons/fa";
 
-interface Photos {
-    photos: {
-        archivedStore: Photo[],
-    }
+interface PhotoProps {
+    photo: Photo;
+    removeFromStorage: () => void;
+    openModal: (photo: any) => any;
 }
 
-export function ArchivedPhotos() {
-    const archivePhotosArr = useSelector<Photos, Photo[]>(
-        (state) => state.photos.archivedStore
-    );
+export function ArchivedPhoto({ photo, removeFromStorage, openModal }: PhotoProps) {
 
     return (
-        <PhotoListContainer>
-            {archivePhotosArr.map((photo) => (
-                <PhotoContainer key={photo.id}>
-                    <PhotoSprite src={photo.download_url} />
-                    <PhotoInfo>
-                        <PhotoAuthor>{photo.author}</PhotoAuthor>
-                        <PhotoNum>#{photo.id}</PhotoNum>
-                    </PhotoInfo>
-                    {/* <PhotoBtn onClick={() => dispatch(removeFromStore(photo))}>Add photo to storage</PhotoBtn> */}
-                </PhotoContainer>
-            ))}
-        </PhotoListContainer>
+        <PhotoContainer>
+            <PhotoSprite onClick={() => openModal(photo)} src={photo.download_url} />
+            <PhotoInfo>
+                <PhotoAuthor>{photo.author}</PhotoAuthor>
+                <PhotoNum>#{photo.id}</PhotoNum>
+            </PhotoInfo>
+            <PhotoBtn onClick={() => removeFromStorage()} ><FaHeart /></PhotoBtn>
+        </PhotoContainer>
     )
 }

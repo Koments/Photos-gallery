@@ -1,32 +1,44 @@
-//Уточнить как передать новую страницу
-
 import { createSlice } from "@reduxjs/toolkit";
-import { Photo } from "../components/atoms/archived-photo/types";
+import { Photo } from "../components/molecules/archived-photo-container/types";
 
 const photoSlice = createSlice({
     name: "photo",
     initialState: {
         archivedStore: [] as Photo[],
-        activePage: 'https://picsum.photos/v2/list?page=1&limit=12'
+        pageNum: 1 as number,
+        limitPhotos: 40 as number,
     },
     reducers: {
         archivedPhoto(state, action) {
             state.archivedStore.push({
                 ...action.payload
             })
-        }, changePage(state, action) {
-            //!
-            // const urlSplit = state.activePage.split('page=');
-            // const urlSecondSplit = urlSplit[1].split('&')
-            // const newPage = parseInt(urlSecondSplit[0]) + action.payload
-        }, unZipPhoto(state, action){
+        }, 
+        
+        setNewLimitPhotos(state, action) {
+            state.limitPhotos = action.payload;
+        },
+
+        setNextPage(state) {
+            state.pageNum += 1;
+        }, 
+
+        setPrevPage(state) {
+            state.pageNum -= 1;
+        },
+
+        setActivePage(state, action) {
+            state.pageNum = action.payload;
+        },
+
+        unZipPhoto(state, action) {
             state.archivedStore = state.archivedStore.filter((notes) => notes.id !== action.payload.id);
         }
-        
+
     },
 });
 
-export const { archivedPhoto, changePage, unZipPhoto } = photoSlice.actions;
+export const { archivedPhoto, setNewLimitPhotos, setNextPage, setPrevPage, setActivePage, unZipPhoto } = photoSlice.actions;
 
 
 export default photoSlice.reducer;

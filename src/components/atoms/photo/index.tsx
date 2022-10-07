@@ -1,5 +1,6 @@
-import { PhotoContainer, PhotoAuthor, PhotoBtn, PhotoInfo, PhotoNum, PhotoSprite } from "../../molecules/photo-list/styled-components";
-import { Photo } from "../archived-photo/types";
+import { Photo } from "../../molecules/archived-photo-container/types";
+import { PhotoAuthor, PhotoBtn, PhotoContainer, PhotoInfo, PhotoNum, PhotoSprite } from "../archived-photo/styles-container";
+import { FaHeart } from "react-icons/fa";
 
 interface PhotoProps {
     photo: Photo;
@@ -16,8 +17,7 @@ export function PhotoCardContainer({ photo, addToStorage, removeFromStorage }: P
                 <PhotoAuthor>{photo.author}</PhotoAuthor>
                 <PhotoNum>#{photo.id}</PhotoNum>
             </PhotoInfo>
-            {/* //Не сильно ли глупо будеть указывать конечном изминении на фолс именем какую функцию я выполняю для ремове */}
-            {photo.archived === true ? <PhotoBtn onClick={() => removeFromStorage(photo.id)}>Remove photo from storage</PhotoBtn> : <PhotoBtn onClick={() => addToStorage(photo.id)}>Add photo to storage</PhotoBtn>}
+            {photo.archived === true ? <PhotoBtn onClick={() => removeFromStorage(photo.id)}><FaHeart style={{ color: "red" }} /></PhotoBtn> : <PhotoBtn onClick={() => addToStorage(photo.id)}><FaHeart /></PhotoBtn>}
         </PhotoContainer>
     )
 }
